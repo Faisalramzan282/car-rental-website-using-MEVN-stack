@@ -6,6 +6,11 @@ import CreateUser from '../views/manager/user-crud/CreateUserView.vue'
 import UpdateDelUsers from '../views/manager/user-crud/UpdateDelUserView.vue';
 import AddCar from '../views/manager/car-crud/AddCarView.vue';
 import UpdateDelCar from '../views/manager/car-crud/UpdateDelCarView.vue';
+import HomePageUser from '../views/user/HomePageView.vue';
+import CarAvailable from '../views/user/CarAvailableView.vue';
+import CarFilter from '../views/user/CarFilterView.vue';
+import ReserveCar from '../views/user/ReserveCarView.vue';
+import ReserveCancel from '../views/user/ReserveCancel.vue'
 const routes = [
   { 
     path: '/sign-up',
@@ -44,6 +49,34 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/',
+    name: 'home-user',
+    component: HomePageUser,
+    children:[
+      {
+        path: 'car-available',
+        name: 'car-available',
+        component: CarAvailable,
+      },
+      {
+        path: 'car-filter',
+        name: 'car-filter',
+        component: CarFilter
+      }, 
+      {
+        path: 'reserve-car',
+        name: 'reserve-car',
+        component: ReserveCar
+      },
+      {
+        path: 'reserve-cancel',
+        name : 'reserve-cancel',
+        component: ReserveCancel
+      }
+    ]
+  }
+  
 ]
 
 const router = createRouter({

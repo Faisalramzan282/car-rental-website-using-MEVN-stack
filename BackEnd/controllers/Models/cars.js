@@ -23,11 +23,11 @@ const CarSchema = new Schema({
         },
         availability: {
           type: String,
-          enum: ['available', 'not available'],
+          enum: ['available', 'not available', 'reserved'],
           default: 'available',
         },
       },
     ],
   });
   
-  module.exports = mongoose.model('Car', CarSchema);
+module.exports = mongoose.model('Car', CarSchema);

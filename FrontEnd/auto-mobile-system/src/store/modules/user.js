@@ -49,13 +49,21 @@ const actions = {
           console.log("data is ==>", data.data);
           commit("LOGIN_VALIDATION_ERROR", data.message)
           commit("SET_WEB_TOKENS", data.data.token); //for web tokens
-          if(data.data.user.role === "manager")
+          if(data.data.user.role === "manager") //for manager's side
           {
             const userInfo ={
               token : data.data.token, 
               mangerID: data.data.user._id
             }
             localStorage.setItem('managerDetail', JSON.stringify(userInfo));
+          }
+          else if(data.data.user.role === "user")  //for user's side
+          {
+            const userInfo ={
+              token : data.data.token, 
+              userId: data.data.user._id
+            }
+            localStorage.setItem('userLoginData', JSON.stringify(userInfo));
           }
         }catch (error) {
           console.log("error is ===>", error);

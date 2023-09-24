@@ -2,8 +2,6 @@ const carModel = require('./Models/cars');
 module.exports = {
     addCar: async (req, res, next) => {
         console.log("car detail is ==>", req.body);
-        // const { name, model, colour, availability } = req.body;
-        // console.log("Car ==>", carModel.find());
         const { name, model, colour, availability, mangerID } = req.body;
         try {
         const newCar = {
@@ -16,7 +14,6 @@ module.exports = {
         let CarDetail = await carModel.findOne({ mangerID : mangerID });
         console.log("id existed ==>", CarDetail);
         if (!CarDetail) {
-          console.log("inside not manger existed");
           CarDetail = await carModel.create({ mangerID: mangerID, cars: [newCar] });
         } 
         else {

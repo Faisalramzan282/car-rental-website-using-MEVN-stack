@@ -96,7 +96,6 @@
             </div>
           </div>
         </div>
-        <!-- Reservation Menu -->
         <div
           class="relative inline-block text-left"
           @mouseleave="reservationDropMenu = false"

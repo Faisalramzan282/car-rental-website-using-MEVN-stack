@@ -5,7 +5,9 @@ const cors = require('cors');
 const port = process.env.PORT || 3001;
 const users = require('./routes/users')
 const cars = require('./routes/cars');
+const userFunctions = require('./routes/userFunctionalities/userFunctions');
 const mongoose = require('mongoose');
+const router = require('./routes/cars');
 // app.use(logger('dev'));
 require('dotenv').config();
 app.use(cors());
@@ -21,6 +23,7 @@ mongoose
     .catch((err) => console.log(err))
 app.use('/', users);
 app.use('/cars', cars);
+app.use('/user-page', userFunctions);
 app.listen(port, () => {
   console.log(`Server is running on port http://localhost:${port}/`);
 });

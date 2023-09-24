@@ -17,7 +17,7 @@
           </div>
           <div class="mb-4 flex">
             <div class="mr-10">
-              <label class="block text-sm font-medium text-gray-600 text-left">Role:</label>
+              <label class="block text-sm font-medium text-gray-600 text-left">Availability</label>
             </div>
             <div class="flex space-x-4">
               <label class="flex items-center">
