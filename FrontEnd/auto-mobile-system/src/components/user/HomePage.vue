@@ -1,11 +1,13 @@
 <template>
-  <div>
+  <div class="min-h-screen flex flex-col">
     <NavBarUser />
     <template v-if="route.path === '/'">
         <HomePageBody  />
     </template>
     <router-view></router-view>
-    <FooterMang />
+    <footer class="mt-auto">
+      <FooterMang />
+    </footer>
   </div>
 </template>
 <script setup>

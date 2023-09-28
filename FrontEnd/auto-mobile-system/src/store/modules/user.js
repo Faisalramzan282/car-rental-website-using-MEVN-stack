@@ -1,5 +1,5 @@
 import axios from "axios";
-// import router from "@/router";
+import router from "@/router";
 const state = {
     users: [],
     tokens: "", //tokens generating jwt came here
@@ -9,7 +9,6 @@ const state = {
     loginError : null,
     allUsers:  null
 }
-
 const mutations={
       SET_WEB_TOKENS(state, payload) {
         state.tokens = payload;
@@ -46,7 +45,7 @@ const actions = {
           localStorage.getItem('managerDetail') | [];
           try {
           const { data } = await axios.post("/authenticate", payload);
-          console.log("data is ==>", data.data);
+          console.log("data is ==>", data);
           commit("LOGIN_VALIDATION_ERROR", data.message)
           commit("SET_WEB_TOKENS", data.data.token); //for web tokens
           if(data.data.user.role === "manager") //for manager's side
@@ -56,6 +55,7 @@ const actions = {
               mangerID: data.data.user._id
             }
             localStorage.setItem('managerDetail', JSON.stringify(userInfo));
+            router.push({name: 'home-mang'});
           }
           else if(data.data.user.role === "user")  //for user's side
           {
@@ -64,9 +64,10 @@ const actions = {
               userId: data.data.user._id
             }
             localStorage.setItem('userLoginData', JSON.stringify(userInfo));
+            router.push({name: 'home-user'});
           }
         }catch (error) {
-          console.log("error is ===>", error);
+          alert("token is not found");
         }
       },
       async getUsers({commit})

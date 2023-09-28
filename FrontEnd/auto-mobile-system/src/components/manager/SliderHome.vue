@@ -29,11 +29,10 @@
     setup() {
       const currentIndex = ref(0);
       const sliderImages = reactive([
-        'sliderImg1.jpeg',
-        'slider-img2.jpeg',
-        'slider-img3.jpeg',
+        'car-img1.jpg',
+        'car-img2.jpg',
+        'car-img3.jpg',
       ]);
-  
       const autoSlide = () => {
         setInterval(() => {
           currentIndex.value = (currentIndex.value + 1) % sliderImages.length;

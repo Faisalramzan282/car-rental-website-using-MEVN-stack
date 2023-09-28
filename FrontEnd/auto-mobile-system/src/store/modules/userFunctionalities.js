@@ -1,7 +1,8 @@
 import axios from "axios"
 const state = {
   allCars : null,
-  reserveCars: null
+  reserveCars: null,
+  allAvailableCars: null
 }
 const mutations={
  ALL_CARS(state, payload)
@@ -11,17 +12,38 @@ const mutations={
  RESERVE_CARS(state, payload)
  {
   state.reserveCars = payload;
+ },
+ ALL_AVAILABLE_CARS(state, payload)
+ {
+     state.allAvailableCars = payload;
  }
 }
 const actions={
-  async getAllCars({commit}){
+  async getAllCars({commit}, payload){
   try {
-    const {data} = await axios.get(`/user-page/get-all-cars`);
-    commit('ALL_CARS', data);
+    const config = {
+      headers: {
+        'searchdata': payload,
+        'Content-Type': 'application/json'
+      }
+    };
+    const {data} = await axios.get(`/user-page/get-all-cars`, config);
+    commit('ALL_CARS', data.data);
   } catch (error) {
     console.log("error is ==>", error);
   }
   },
+  async getAvailableCars({commit})
+  {
+    try{
+     const {data} = await axios.get('/user-page/get-available-cars');
+    //  console.log("res is ==>", data.data);
+    commit("ALL_AVAILABLE_CARS", data.data);
+    }catch(error )
+    {
+      console.log('error is ==>', error);
+    }
+  }, 
   async reserveCar(_,payload)
   {
    try {
@@ -65,12 +87,8 @@ const actions={
     };
      try {
       const {data} = await axios.delete(`/user-page/cancel-reservation`, config);
-      console.log('response is ===>', data.data);
+      // console.log('response is ===>', data.data);
       commit('RESERVE_CARS', data.data);
-      // if(data.status === 200)
-      // {
-      //   alert("car cancellation");
-      // }
      } catch (error) {
       console.log('error is ==>', error);
      }
@@ -84,6 +102,10 @@ const getters={
   getAllReserveCars(state)
   {
     return state.reserveCars;
+  },
+  getAllAvailableCars(state)
+  {
+    return state.allAvailableCars;
   }
 }
 export default{

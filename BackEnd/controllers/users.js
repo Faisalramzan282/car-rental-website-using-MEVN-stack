@@ -15,7 +15,7 @@ module.exports = {
      const usernamePattern = /^(?=.*\d)([A-Z][a-zA-Z0-9]*)$/;
      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
      if (!usernamePattern.test(data.username)) {
-        errors.push('Username start with capital letter and include numbers');
+        errors.push('Username start with capital letter and include numbers and not include special characters');
      }
     if(!emailPattern.test(data.email)) {
       errors.push('Invalid Email');
@@ -31,7 +31,8 @@ module.exports = {
         message: errors,
       });
     }
-    const user = new userModel(data);
+    else{
+      const user = new userModel(data);
       user.save()
         .then((createdUser) => {
             res.status(201).json({
@@ -47,6 +48,9 @@ module.exports = {
                 error: err.message
             });
         });
+    }
+
+    
     
     },
     authenticate: async (req, res, next) => {

@@ -5,24 +5,17 @@
         type="text"
         class="bg-white border border-gray-300 rounded-md py-4 px-6 focus:outline-none w-full"
         placeholder="Search cars by name, model, colour..."
-        v-model="searchData"
-      />
-      <button
-        class="bg-blue-500 text-white rounded-md py-4 px-6 hover:bg-blue-600 focus:outline-none"
-        @click="searchBtn"
-      >
-        Search
-      </button>
+        v-on:input="searchMethod">
     </div>
     <!-- filted-cars -->
     <div v-show="filterCarData">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-10">
-        <template  v-if="filterCarData.length === 0">
+        <template  v-if="allCars === null || allCars.length === 0">
           <p class="text-white text-3xl">Nothing to filter out</p>
         </template>
         <template v-else>
           <div
-            v-for="(car, index) in filterCarData"
+            v-for="(car, index) in allCars"
             :key="index"
             class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 transform hover:shadow-xl card">
             <img
@@ -53,7 +46,6 @@
             </div>
           </div>
         </template>
-        <RserveCar v-show="filterCarData==null"/>
       </div>
     </div>
   </div>
@@ -61,29 +53,22 @@
 <script setup>
 import router from "@/router";
 import { onMounted, computed, ref} from "vue";
-const searchData = ref(null);
 import { useStore } from "vuex";
 const store = useStore();
-let allCars = ref([]);
+const showReserveCar = ref(false);  
 let filterCarData = ref([]);
-allCars = computed(() => store?.getters["userFunctionalities/getAllCarss"]);
+const allCars = computed(() => store.getters["userFunctionalities/getAllCarss"]);
 onMounted(async () => {
-  try {
-    await store.dispatch("userFunctionalities/getAllCars");
-  } catch (error) {
-    console.error("Error fetching users:", error);
+  try{
+  await store.dispatch("userFunctionalities/getAllCars");
+  }catch (error) {
+    console.error("Error fetching cars:", error);
   }
 });
-const searchBtn = () => {
-  const searchValue = searchData.value.trim().toLowerCase();
-  const filteredCars = allCars.value.filter(
-    (car) =>
-      car.name.toLowerCase().includes(searchValue) ||
-      car.colour.toLowerCase().includes(searchValue) ||
-      car.model.toLowerCase().includes(searchValue)
-  );
-  filterCarData.value = filteredCars;
-};
+const searchMethod= async (event)=>{
+  // console.log("in local component",event.target.value);
+  await store.dispatch('userFunctionalities/getAllCars', event.target.value);
+}
 const notAvailBtn =()=>{
     alert('car is not available')
 }
@@ -94,12 +79,13 @@ const reserveCarBtn=(car)=>{
         router.push({name: 'login'});
     }
     else{
-        const userCarObj ={
+        const userCarIds ={
             carId: car._id,
             userId: userLoginData.userId
         }
-        localStorage.setItem('userCarObj', JSON.stringify(userCarObj));// set userId and carId here  
-        router.push({name: 'reserve-car'});
+        localStorage.setItem('userCarObj', JSON.stringify(userCarIds));// set userId and carId here  
+        showReserveCar.value = true;
+        router.push('/reserve-car');
     }
 }
 </script>

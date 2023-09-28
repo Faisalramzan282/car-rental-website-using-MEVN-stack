@@ -11,6 +11,9 @@ import CarAvailable from '../views/user/CarAvailableView.vue';
 import CarFilter from '../views/user/CarFilterView.vue';
 import ReserveCar from '../views/user/ReserveCarView.vue';
 import ReserveCancel from '../views/user/ReserveCancel.vue'
+import ReserveCarUser from '../views/manager/ReserveCarsView.vue';
+import UnauthorizePage from '../views/UnauthorizePageView.vue';
+import UserReserveCars from '../views/manager/UserReserveCarsView.vue';
 const routes = [
   { 
     path: '/sign-up',
@@ -23,9 +26,26 @@ const routes = [
     component: LoginPage
   },
   {
+    path: '/unauthorize',
+    name: 'unauthorize',
+    component: UnauthorizePage
+  }, 
+  {
     path: '/home-mang',
     name: 'home-mang',
     component: HomePage,
+    beforeEnter: (to, from, next) => {
+      let managerDetail =JSON.parse(localStorage.getItem('managerDetail'));
+      if (managerDetail) {
+        if (managerDetail.token && managerDetail.mangerID) {
+          next();
+        } else {
+          next('/unauthorize');
+        }
+      } else {
+        next('/unauthorize');
+      }
+     },
     children:[
       {
         path: 'create-user',
@@ -46,6 +66,16 @@ const routes = [
         path: 'update-del-car',
         name: 'update-del-car',
         component: UpdateDelCar
+      },
+      {
+        path: 'reserve-cars',
+        name: 'reserve-cars',
+        component: ReserveCarUser
+      },
+      {
+        path: 'users-reserve-car',
+        name: 'users-reserve-car', 
+        component: UserReserveCars
       }
     ]
   },
@@ -53,6 +83,18 @@ const routes = [
     path: '/',
     name: 'home-user',
     component: HomePageUser,
+    beforeEnter: (to, from, next) => {
+      let userLoginData = JSON.parse(localStorage.getItem('userLoginData'));
+      if (userLoginData) {
+        if (userLoginData.token && userLoginData.userId) {
+          next();
+        } else {
+          next('/unauthorize');
+        }
+      } else {
+        next('/unauthorize');
+      }
+    },
     children:[
       {
         path: 'car-available',
@@ -83,5 +125,21 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+// router.beforeEach((to, from, next) => {
+//   const managerDetail = JSON.parse(localStorage.getItem('managerDetail'));
 
+//   if (to.name !== 'home-mang') {
+//     // Check if managerDetail and required properties (token and managerId) exist
+//     if (!managerDetail || !managerDetail.token || !managerDetail.mangerID) {
+//       // Redirect to the unauthorized page if not authenticated
+//       next('/unauthorize');
+//     } else {
+//       // Continue to the requested page if authenticated
+//       next();
+//     }
+//   } else {
+//     // Allow access to the home-mang route without authentication
+//     next();
+//   }
+// })
 export default router

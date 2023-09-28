@@ -1,7 +1,11 @@
 <template>
   <div class="m-5">
     <div class="bg-white md:mx-auto rounded-md shadow-md md:w-1/2 w-full p-5 md:m-8 md:p-8">
-    <div class="flex flex-col  mb-4">
+    <div class="flex items-center">
+        <p class="py-4 text-start">First select car through car Filters Section if Not selected</p>
+        <button @click="$router.push({name: 'car-filter'})" class="p-3 m-4 text-white rounded-md cursor-pointer bg-indigo-500 hover:bg-indigo-300">Click here</button>
+    </div>
+        <div class="flex flex-col  mb-4">
         <label class="text-start mb-2" for="pick-up-offices">Pick-up Office:</label>
         <select v-model="reservationData.pickUpLoc" id="pick-up-offices" class="focus:outline-none focus:border-blue-500 border border-gray-300 px-4 py-2 rounded-md">
             <option disabled selected>Select Location</option>
@@ -38,7 +42,6 @@
   </div>
 </template>
 <script setup>
-// import router from '@/router';
 import store from '@/store';
 import {ref} from 'vue';
 const reservationData= ref({
@@ -46,7 +49,7 @@ const reservationData= ref({
    dropOffLoc: '',
    pickUpDate: '',
    dropOffDate: ''
-})
+});
 const confirmResBtn=()=>{
     try {
     const pickUpDate = new Date(reservationData.value.pickUpDate);
@@ -62,10 +65,8 @@ const confirmResBtn=()=>{
     }
     store.dispatch('userFunctionalities/reserveCar', reservationCart)
     localStorage.setItem('userCarObj', null);
-    // router.push({name: 'reserve-cancel'});
     } catch (error) {
         alert("First Reserve A car through filter Cars section");
     }
-    
 }
 </script>

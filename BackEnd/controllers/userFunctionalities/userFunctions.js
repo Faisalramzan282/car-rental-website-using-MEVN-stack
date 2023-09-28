@@ -3,11 +3,21 @@ const reserveCar = require('../Models/reserveCar');
 module.exports = {
   getAllCars: async (req, res) => {
     try {
+      const searchData = req.headers['searchdata'];
+      console.log("search data is===>", searchData);
       const allCars = await carModel.find();
       const allCarsArray = allCars.map(car => car.cars);
       const flattenedArray = allCarsArray.flatMap(array => array);
       const filteredArray = flattenedArray.filter(object => Object.keys(object).length > 0); //for removing/filtering empty objects
-      res.status(200).json(filteredArray);
+      // console.log("filter cars is ==>", filteredArray);
+      const matchingFilters = filteredArray.filter((obj) => {
+        return (
+          obj.name.toLowerCase().startsWith(searchData.toLowerCase()) ||
+          obj.model.toLowerCase().startsWith(searchData.toLowerCase()) ||
+          obj.colour.toLowerCase().startsWith(searchData.toLowerCase())
+        );
+      });
+      res.json({status: 200, msg: 'cars found', data: matchingFilters})
     } catch (error) {
       if (error.name === 'CastError') {
         res.status(404).json({ data: 'Not found ', message: 'Cars not found.' });
@@ -15,6 +25,22 @@ module.exports = {
         res.status(500).json({ data: 'Failed ', message: 'Internal server error.' });
       }
     }
+  },
+  getAvailableCars: async(req, res)=>{
+     try {
+      const allCars = await carModel.find();
+      const allCarsArray = allCars.map(car => car.cars);
+      const flattenedArray = allCarsArray.flatMap(array => array);
+      const filteredArray = flattenedArray.filter(object => Object.keys(object).length > 0);
+      // console.log("filter array ===>", filteredArray);
+      res.json({status: 200, msg: 'cars found', data: filteredArray})
+     } catch (error) {
+      if (error.name === 'CastError') {
+        res.status(404).json({ data: 'Not found ', message: 'Cars not found.' });
+      } else {
+        res.status(500).json({ data: 'Failed ', message: 'Internal server error.' });
+      }
+     }
   },
   reserveCarData: async (req, res) => {
     const carId = req.body.carId;

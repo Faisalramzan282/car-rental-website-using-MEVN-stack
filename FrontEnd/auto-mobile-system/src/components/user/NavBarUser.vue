@@ -4,23 +4,17 @@
         <div
           class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
         >
-          <a href="#" class="flex items-center">
+          <router-link to="/" class="flex items-center cursor-pointer">
             <img
-              src="../../assets/carRental-logo.png"
-              class="h-8 mr-3"
+              src="../../assets/car-deal.png"
+              class="h-8 mr-3 rounded-lg"
               alt="Flowbite Logo"
             />
-            <span
-              class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-              >Automobile</span
-            >
-          </a>
+          </router-link>
           <div
             class="relative inline-block text-left"
             @mouseleave="userDropMenu = false"
-          >
-          
-            
+          > 
           </div>
           <!-- Car Menu -->
           <div
@@ -102,15 +96,22 @@
               </div>
             </div>
           </div>
+          <div>
+            <button class="text-white" @click="logoutBtn">Logout</button>
+          </div>
         </div>
       </nav>
-      
     </div>
   </template>
   <script setup>
   import { ref } from "vue";
+  import router from "@/router";
   const userDropMenu = ref(false);
   const carDropMenu = ref(false);
   const reservationDropMenu = ref(false);
+  const logoutBtn=()=>{
+  localStorage.removeItem('userLoginData');
+   router.push({name: 'login'});
+  }
   </script>
   

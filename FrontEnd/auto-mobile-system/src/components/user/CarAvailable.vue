@@ -1,6 +1,8 @@
 <template>
  <div class="container mx-auto p-4">
+       <LoaderComp v-show="showLoader"/>     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
         <div v-for="(car, index) in allCars.value" :key="index" class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 transform hover:shadow-xl card">
             <img src="../../assets/car-img.png" alt="car-img" class="w-full h-40 object-cover object-center rounded-t-lg">
             <div class="p-4">
@@ -16,13 +18,16 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import LoaderComp from '../manager/LoaderComp.vue';
 const store = useStore();
 const allCars = ref(null);
-allCars.value = computed(()=>store?.getters['userFunctionalities/getAllCarss'])
+const showLoader = ref(false);
+allCars.value = computed(()=>store?.getters['userFunctionalities/getAllAvailableCars'])
 onMounted(async ()=>{
   try {
-    await store.dispatch('userFunctionalities/getAllCars');
-  //  allUsers.value = store.getters['user/getAllUsers'];
+    showLoader.value = true;
+    await store.dispatch('userFunctionalities/getAvailableCars');
+    showLoader.value = false;
   }catch (error) {
     console.error('Error fetching users:', error);
   }

@@ -15,11 +15,11 @@
         assistance.
       </p>
       <div class="flex justify-center mt-4">
-        <button
+        <button @click="$router.push({name: 'reserve-car'})"
           class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mx-2 rounded">
           Reserve a Car
         </button>
-        <button
+        <button @click="$router.push({name: 'car-available' })"
           class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mx-2 rounded">
           Check Car Availability
         </button>

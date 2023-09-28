@@ -1,12 +1,22 @@
 import axios from "axios";
 const state= {
-  allCars: null
+  allCars: null,
+  reservedCars: null,
+  usersReserveCar: null
 }
 const mutations={
     ALL_CARS(state, payload)
     {
         state.allCars = payload;
         // console.log("anbncc", state.allCars);
+    },
+    RESERVED_CARS(state, payload)
+    {
+        state.reservedCars = payload;
+    }, 
+    USERS_RESERVE_CAR(state, payload)
+    {
+       state.usersReserveCar = payload;
     }
 }
 const actions={
@@ -18,10 +28,8 @@ const actions={
         ...payload,
         ...managerDetail  //manger id and token
     }
-    // console.log("payload===>", payload);
     try {
         const {data} = await axios.post('/cars/add-car', payload);
-        // console.log("stateus==>", data);
         if(data.status === "Success")
         {
             alert("Car Added Successfully");
@@ -60,12 +68,46 @@ async updateCar({commit}, payload)
         {
             alert("car Updated successfully");
         }
+},
+async getReservedCars({commit})
+{
+   try {
+    const managerDetail = JSON.parse(localStorage.getItem('managerDetail'));
+    // console.log("manid ==>", managerDetail.mangerID);
+    const config = {
+        headers: {
+          'mangerId': managerDetail.mangerID,
+          'Content-Type': 'application/json'
+        }
+      };
+    const {data} = await axios.get('/cars/get-reserve-cars', config);
+    console.log("data ==>", data);
+    commit('RESERVED_CARS', data.data);
+    }catch (error) {
+    console.log("error is", error);
+   }
+},
+async userReserveCars({commit})
+{
+   try {
+    const {data} = await axios.get('/cars/users-reserve-car');
+    commit("USERS_RESERVE_CAR", data.data)
+   } catch (error) {
+    console.log("error is ", error);
+   }
 }
 }
 const getters={
     getAllCars(state)
     {
         return state.allCars;
+    },
+    showReserveCars(state){
+        return state.reservedCars;
+    }, 
+    showUsersReserveCar(state)
+    {
+     return state.usersReserveCar
     }
 }
 export default{

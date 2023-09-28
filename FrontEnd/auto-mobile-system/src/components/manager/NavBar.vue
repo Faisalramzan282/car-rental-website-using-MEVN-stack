@@ -4,16 +4,12 @@
       <div
         class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
       >
-        <a href="#" class="flex items-center">
+        <a href="/home-mang" class="flex items-center">
           <img
-            src="../../assets/carRental-logo.png"
+            src="../../assets/car-deal.png"
             class="h-8 mr-3"
             alt="Flowbite Logo"
           />
-          <span
-            class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-            >Automobile</span
-          >
         </a>
         <div
           class="relative inline-block text-left"
@@ -119,32 +115,38 @@
               aria-orientation="vertical"
               aria-labelledby="options-menu"
             >
-              <a
+              <router-link
                 @mouseover="reservationDropMenu = true"
-                href="#"
+                to="/home-mang/reserve-cars"
                 class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-600"
                 role="menuitem"
-                >Reserve Cars</a
+                >Reserve Cars</router-link
               >
-              <a
+              <router-link
                 @mouseover="reservationDropMenu = true"
-                href="#"
+                to="/home-mang/users-reserve-car"
                 class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-600"
                 role="menuitem"
-                >Users who Reserved cars </a
-              >
+                >Users who Reserved cars </router-link>
               
             </div>
           </div>
         </div>
+        <div>
+          <button class="text-white" @click="logoutBtn">Logout</button>
+        </div>
       </div>
     </nav>
-    
   </div>
 </template>
 <script setup>
+import router from "@/router";
 import { ref } from "vue";
 const userDropMenu = ref(false);
 const carDropMenu = ref(false);
 const reservationDropMenu = ref(false);
+const logoutBtn=()=>{
+  localStorage.removeItem('managerDetail');
+  router.push({name: 'unauthorize'});
+}
 </script>
